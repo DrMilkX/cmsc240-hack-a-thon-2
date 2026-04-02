@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pizza Order</title>
+</head>
+<body>
+    <h1>Pizza Order</h1>
+    <p>Welcome to our pizza ordering system! Please select your pizza and toppings.</p>
+
+    <form id="pizzaForm">
+        <input type="checkbox" name="topping" value="pepperoni"> Pepperoni<br>
+        <input type="checkbox" name="topping" value="mushrooms"> Mushrooms<br>
+        <input type="checkbox" name="topping" value="onions"> Onions<br>
+        <input type="checkbox" name="topping" value="sausage"> Sausage<br>
+        <input type="checkbox" name="topping" value="bacon"> Bacon<br>
+        <input type="checkbox" name="topping" value="extra_cheese"> Extra Cheese<br>
+        <input type="checkbox" name="topping" value="black_olives"> Black Olives<br>
+        <input type="checkbox" name="topping" value="green_peppers"> Green Peppers<br>
+        <input type="checkbox" name="topping" value="pineapple"> Pineapple<br>
+        <input type="checkbox" name="topping" value="spinach"> Spinach<br>
+        <input type="text" name="other_topping" placeholder="Other Topping"><br><br>
+        <input type="submit" value="Submit Order">
+    </form>
+
+    <br>
+
+    <textarea id="order_summary" rows="10" cols="40" readonly></textarea>
+
+    <script>
+        document.getElementById("pizzaForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
+
+            const checked = document.querySelectorAll('input[name="topping"]:checked');
+            const toppings = Array.from(checked).map(cb => cb.value);
+            const otherTopping = document.querySelector('input[name="other_topping"]').value;
+            if (otherTopping) {
+                toppings.push(otherTopping);
+            }
+            console.log("Selected toppings:", toppings);
+
+            const response = await fetch("/order", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ toppings: toppings })
+            });
+
+            const text = await response.text();
+
+            const box = document.getElementById("order_summary");
+            box.value += text + "\n";
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+MAIN_FILE = pizza.cpp
+PROGRAM = app	
+
+app : $(MAIN_FILE)
+	g++ -std=c++17 $(MAIN_FILE) -I/opt/homebrew/include -I/opt/homebrew/Cellar/asio/1.36.0/include/ -lpthread -o $(PROGRAM)
+clean:
+	rm -f $(PROGRAM)
